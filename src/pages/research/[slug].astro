@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { gradient, statusLabel, statusTagClass } from '../../lib/format';
+
+export const getStaticPaths = (async () => {
+  const research = await getCollection('research');
+  return research.map((r) => ({
+    params: { slug: r.id },
+    props: { r },
+  }));
+}) satisfies GetStaticPaths;
+
+const { r } = Astro.props;
+const { Content } = await render(r);
+---
+<BaseLayout title={`${r.data.title} — Yun-Jie Wu`} description={r.data.summary} active="projects">
+  <article class="article">
+    {r.data.image ? (
+      <div class="hero-thumb hero-photo">
+        <img src={r.data.image} alt={r.data.title} />
+        <span class:list={['tagtr', statusTagClass(r.data.status)]}>{statusLabel(r.data.status)}</span>
+      </div>
+    ) : (
+      <div class:list={['hero-thumb', gradient(r.data.color)]}>
+        <span class:list={['tagtr', statusTagClass(r.data.status)]}>{statusLabel(r.data.status)}</span>
+      </div>
+    )}
+    {r.data.imageCredit && <p class="credit" set:html={r.data.imageCredit} />}
+    <div class="meta">
+      <span>{r.data.category}</span>
+    </div>
+    <h1>{r.data.title}</h1>
+    <div class="prose">
+      <Content />
+    </div>
+    <a class="back" href="/research/">← All research</a>
+  </article>
+</BaseLayout>

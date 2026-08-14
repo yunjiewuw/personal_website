@@ -13,6 +13,8 @@ const research = defineCollection({
     summary: z.string(),           // one-liner shown on the card
     order: z.number().default(0),  // manual sort, ascending
     color: morandi.default('sage'),
+    image: z.string().optional(),        // preview/hero photo, e.g. '/project-x.jpg'
+    imageCredit: z.string().optional(),  // raw HTML credit shown under the hero photo
   }),
 });
 

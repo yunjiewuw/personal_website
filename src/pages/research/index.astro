@@ -17,13 +17,14 @@ const research = (await getCollection('research')).sort(
     <div class="gallery">
       {research.map((r) => (
         <GalleryCard
-          href="/research/"
+          href={`/research/${r.id}/`}
           title={r.data.title}
           oneliner={r.data.summary}
           tagLabel={statusLabel(r.data.status)}
           tagClass={statusTagClass(r.data.status)}
           gradient={gradient(r.data.color)}
           avatar={avatarClass(r.data.color)}
+          image={r.data.image}
         />
       ))}
     </div>

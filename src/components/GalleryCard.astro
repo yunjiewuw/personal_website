@@ -8,11 +8,13 @@ interface Props {
   gradient: string;   // e.g. 'g-clay'
   avatar: string;     // e.g. 'a-clay'
   initials?: string;
+  image?: string;     // optional preview photo; falls back to the gradient
 }
-const { href, title, oneliner, tagLabel, tagClass, gradient, avatar, initials = 'YW' } = Astro.props;
+const { href, title, oneliner, tagLabel, tagClass, gradient, avatar, initials = 'YW', image } = Astro.props;
 ---
 <a class="card" href={href}>
   <div class:list={['thumb', gradient]}>
+    {image && <img src={image} alt="" loading="lazy" />}
     <span class:list={['tagtr', tagClass]}>{tagLabel}</span>
   </div>
   <div class="body">
