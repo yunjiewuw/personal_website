@@ -22,7 +22,8 @@ const posts = (await getCollection('writing'))
   <section class="about" id="about">
     <div class="photo">
       <span class="tag">about</span>
-      <img src="/profile.png" alt="Yun-Jie Christina Wu" />
+      <img class="photo-frame is-active" src="/profile.png" alt="Yun-Jie Christina Wu" />
+      <img class="photo-frame" src="/profile-2.png" alt="Yun-Jie Christina Wu, illustrated" />
     </div>
     <div class="info">
       <h1 class="name">Yun-Jie Christina Wu</h1>
@@ -98,3 +99,23 @@ const posts = (await getCollection('writing'))
   </section>
 
 </BaseLayout>
+
+<style>
+  /* Crossfade rotation between multiple .photo-frame images (see script below). */
+  .photo-frame{transition:opacity 900ms ease}
+  .photo-frame:not(.is-active){opacity:0}
+</style>
+
+<script>
+  // Rotates through every .photo-frame image in .photo every 20s, crossfading.
+  // Add another <img class="photo-frame"> to include a 3rd photo in the rotation.
+  const frames = document.querySelectorAll<HTMLImageElement>('.photo-frame');
+  if (frames.length > 1) {
+    let i = 0;
+    setInterval(() => {
+      frames[i].classList.remove('is-active');
+      i = (i + 1) % frames.length;
+      frames[i].classList.add('is-active');
+    }, 20000);
+  }
+</script>
