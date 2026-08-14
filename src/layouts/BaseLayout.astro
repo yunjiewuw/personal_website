@@ -1,0 +1,59 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** which nav item to highlight: 'about' | 'projects' | 'writing' | '' */
+  active?: string;
+}
+
+const {
+  title,
+  description = 'Researcher in cognitive & computational neuroscience — unconscious recognition, multimodal speech models, and brain encoding.',
+  active = '',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const siteName = 'Yun-Jie Wu';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={siteName} href={new URL('rss.xml', Astro.site)} />
+    <meta name="generator" content={Astro.generator} />
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('og-default.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="inner">
+        <a class="brand" href="/">{siteName}<span class="dot">.</span></a>
+        <nav>
+          <a href="/#about" class:list={[{ active: active === 'about' }]}>About</a>
+          <a href="/research/" class:list={[{ active: active === 'projects' }]}>Projects</a>
+          <a href="/writing/" class:list={[{ active: active === 'writing' }]}>Writing</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <slot />
+      <footer class="site">
+        <span>{siteName}</span>
+        <span>Email · Scholar · GitHub · X</span>
+      </footer>
+    </main>
+  </body>
+</html>

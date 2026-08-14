@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GalleryCard from '../../components/GalleryCard.astro';
+import { gradient, avatarClass, statusLabel, statusTagClass } from '../../lib/format';
+
+const research = (await getCollection('research')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+<BaseLayout title="Research — Yun-Jie Wu" active="projects">
+  <section class="sec" style="margin-top:8px">
+    <div class="sec-head">
+      <span class="label">Projects</span><h1>Research</h1>
+      <span class="count">{research.length} studies</span>
+    </div>
+    <div class="gallery">
+      {research.map((r) => (
+        <GalleryCard
+          href="/research/"
+          title={r.data.title}
+          oneliner={r.data.summary}
+          tagLabel={statusLabel(r.data.status)}
+          tagClass={statusTagClass(r.data.status)}
+          gradient={gradient(r.data.color)}
+          avatar={avatarClass(r.data.color)}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

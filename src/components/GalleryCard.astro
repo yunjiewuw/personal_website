@@ -1,0 +1,26 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  oneliner: string;
+  tagLabel: string;
+  tagClass: string;   // e.g. 't-review'
+  gradient: string;   // e.g. 'g-clay'
+  avatar: string;     // e.g. 'a-clay'
+  initials?: string;
+}
+const { href, title, oneliner, tagLabel, tagClass, gradient, avatar, initials = 'YW' } = Astro.props;
+---
+<a class="card" href={href}>
+  <div class:list={['thumb', gradient]}>
+    <span class:list={['tagtr', tagClass]}>{tagLabel}</span>
+  </div>
+  <div class="body">
+    <h3>{title}</h3>
+    <p class="one">{oneliner}</p>
+  </div>
+  <div class="foot">
+    <span class="readmore">Read more</span>
+    <span class:list={['avatar', avatar]}>{initials}</span>
+  </div>
+</a>

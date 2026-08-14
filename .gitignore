@@ -1,0 +1,17 @@
+# build output
+dist/
+# generated types
+.astro/
+# dependencies
+node_modules/
+# logs
+npm-debug.log*
+dev.log
+# local-only working files (not part of the site)
+.writing-drafts/
+.memsearch/
+# environment
+.env
+.env.production
+# macOS / editors
+.DS_Store
