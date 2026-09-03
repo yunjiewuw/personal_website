@@ -39,3 +39,14 @@ export const statusTagClass = (s: ResearchStatus) => STATUS_TAG[s];
 
 export const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+
+// --- reading time ---
+// Rough estimate for mixed CJK/Latin text: CJK counts by character (~400/min),
+// everything else counts by word (~200/min). Good enough for a "~N min read" label.
+export const readingTime = (raw: string): number => {
+  const cjk = raw.match(/[一-鿿぀-ヿ]/g) ?? [];
+  const nonCjk = raw.replace(/[一-鿿぀-ヿ]/g, ' ');
+  const words = nonCjk.match(/[A-Za-z0-9']+/g) ?? [];
+  const minutes = cjk.length / 400 + words.length / 200;
+  return Math.max(1, Math.ceil(minutes));
+};

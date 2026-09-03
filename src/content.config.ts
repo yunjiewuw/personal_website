@@ -23,6 +23,7 @@ const writing = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    updated: z.coerce.date().optional(),  // set when the article gets a substantive revision
     type: z.enum(['reflective', 'science-observation', 'industry-observation', 'opinion']),
     summary: z.string(),           // one-liner shown on the card
     color: morandi.default('fog'),

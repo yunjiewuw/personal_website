@@ -93,26 +93,25 @@ img{max-width:100%; display:block}
 
 /* ---- article / post page ---- */
 .article{max-width:720px; margin:0 auto}
-.article .hero-thumb{aspect-ratio:16/6; border-radius:16px; position:relative; margin-bottom:28px; overflow:hidden}
-.article .hero-thumb.hero-photo{margin-bottom:8px}
+.article-head{margin:0 0 24px}
+.article h1{font-size:34px; font-weight:700; line-height:1.2; margin:0 0 14px}
+.byline{display:inline-flex; align-items:center; gap:10px; text-decoration:none; margin-bottom:8px}
+.byline-avatar{width:32px; height:32px; border-radius:50%; object-fit:cover; display:block}
+.byline-name{font-family:system-ui,sans-serif; font-size:14.5px; font-weight:600; color:var(--ink)}
+.article .meta{font-family:system-ui,sans-serif; font-size:13px; color:var(--muted); display:flex; gap:8px; align-items:center; margin-top:2px}
+.article .hero-thumb{aspect-ratio:16/6; border-radius:16px; position:relative; margin-bottom:8px; overflow:hidden}
 .article .hero-thumb img{width:100%; height:100%; object-fit:cover; display:block}
-.credit{font-size:12px; color:var(--muted); margin:0 0 28px; font-family:system-ui,sans-serif}
+.credit{font-size:11px; color:var(--muted); text-align:center; margin:0 0 32px; font-family:system-ui,sans-serif}
 .credit a{color:var(--muted)}
-.article h1{font-size:34px; font-weight:700; line-height:1.2; margin:0 0 10px}
-.article .meta{font-family:system-ui,sans-serif; font-size:13px; color:var(--muted); display:flex; gap:12px; align-items:center; margin-bottom:8px}
-.article .meta.meta-bar{margin:0 0 20px; padding:9px 16px; border-radius:8px}
-.article .meta.meta-bar.t-reflective{background:var(--mauve-soft); color:var(--mauve-ink)}
-.article .meta.meta-bar.t-science-observation{background:var(--sage-soft); color:var(--sage-ink)}
-.article .meta.meta-bar.t-industry-observation{background:var(--sand-soft); color:var(--sand-ink)}
-.article .meta.meta-bar.t-opinion{background:var(--slate-soft); color:var(--slate-ink)}
 .prose{font-size:18px; line-height:1.75}
 .prose p{margin:0 0 18px}
+.prose p:not(.credit){text-align:justify; text-align-last:left}
 .prose h2{font-size:24px; font-weight:700; margin:36px 0 12px; scroll-margin-top:90px}
 .prose h3{font-size:19.5px; font-weight:700; margin:28px 0 10px; scroll-margin-top:90px}
 .prose a{color:var(--sage-ink)}
 .prose strong{font-weight:700}
 .prose blockquote{margin:20px 0; padding:4px 20px; border-left:3px solid var(--highlight);
-  color:#4a4436; font-style:italic; background:var(--highlight-soft); border-radius:0 10px 10px 0}
+  color:#4a4436; font-weight:500; font-style:italic; background:var(--highlight-soft); border-radius:0 10px 10px 0}
 .prose blockquote p{margin:0 0 10px}
 .prose blockquote p:last-child{margin-bottom:0}
 .prose ul,.prose ol{margin:0 0 18px; padding-left:24px}
@@ -124,19 +123,51 @@ img{max-width:100%; display:block}
   margin:8px 0 22px; font-family:system-ui,sans-serif; font-size:14.5px}
 .prose th,.prose td{border:1px solid var(--rule); padding:9px 12px; text-align:left; vertical-align:top; word-break:break-word}
 .prose th{background:var(--highlight-soft); color:var(--sage-ink); font-weight:600}
-.prose .note-ref{font-family:system-ui,sans-serif; font-size:0.7em; color:var(--sage-ink); font-style:normal}
-.prose p.note{font-family:system-ui,sans-serif; font-size:13.5px; line-height:1.6; color:var(--muted);
-  margin:-10px 0 18px}
 .prose del{color:var(--muted)}
+.prose sup a[data-footnote-ref]{font-family:system-ui,sans-serif; font-size:0.7em; color:var(--sage-ink); font-weight:600; text-decoration:none}
+.prose sup a[data-footnote-ref]:hover{text-decoration:underline}
 
-/* ---- table of contents ---- */
-.toc{border:1px solid var(--rule); background:var(--card); border-radius:12px; padding:16px 20px; margin:0 0 32px}
-.toc-head{font-family:system-ui,sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:0 0 10px}
-.toc-list{list-style:none; margin:0; padding:0; font-family:system-ui,sans-serif; font-size:14.5px}
-.toc-list li{margin:0 0 8px}
+/* ---- footnotes (GFM [^N] footnotes, collected at the end of the article) ---- */
+.footnotes{margin:48px 0 0; padding-top:24px; border-top:1px solid var(--rule); font-family:system-ui,sans-serif}
+.footnotes #footnote-label{display:none}
+.footnotes::before{content:"註解"; display:block; font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:0 0 14px}
+.footnotes ol{margin:0; padding-left:22px; font-size:13.5px; line-height:1.7; color:var(--muted)}
+.footnotes li{margin:0 0 10px}
+.footnotes li:last-child{margin-bottom:0}
+.footnotes li p{margin:0}
+.footnotes a[data-footnote-backref]{color:var(--sage-ink); text-decoration:none; margin-left:4px}
+.footnotes a[data-footnote-backref]:hover{color:var(--clay-ink)}
+
+/* ---- article footer: tags / comments / prev-next / more posts ---- */
+.article-foot{margin-top:48px}
+.comments{margin:36px 0}
+.post-nav{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:36px 0; padding-top:28px; border-top:1px solid var(--rule)}
+.post-nav-link{display:flex; flex-direction:column; gap:6px; text-decoration:none; padding:16px 18px;
+  border:1px solid var(--rule); border-radius:12px; transition:border-color .15s,background .15s}
+.post-nav-link:hover{border-color:var(--sage); background:var(--highlight-soft)}
+.post-nav-link.next{text-align:right; align-items:flex-end}
+.post-nav-label{font-family:system-ui,sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted)}
+.post-nav-title{font-size:15px; color:var(--ink); line-height:1.4}
+.more-posts{margin:36px 0}
+.more-posts-head{font-family:system-ui,sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); margin:0 0 16px; font-weight:600}
+.more-posts .gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px}
+
+/* ---- table of contents: fixed left rail, at every viewport width ---- */
+details.toc{position:fixed; top:84px; left:24px; z-index:5; width:208px; max-height:calc(100vh - 104px); overflow-y:auto;
+  border:1px solid var(--rule); background:var(--card); border-radius:12px; padding:14px 18px;
+  box-shadow:0 12px 28px -18px rgba(70,60,45,.35)}
+.toc-head{font-family:system-ui,sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted);
+  margin:0; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px}
+.toc-head::-webkit-details-marker{display:none}
+.toc-head::marker{content:""}
+.toc-head::after{content:"▾"; font-size:11px; color:var(--muted); transition:transform .15s; flex-shrink:0}
+details.toc:not([open]) .toc-head::after{transform:rotate(-90deg)}
+details.toc[open] .toc-head{margin-bottom:10px}
+.toc-list{list-style:none; margin:0; padding:0; font-family:system-ui,sans-serif; font-size:13.5px}
+.toc-list li{margin:0 0 8px; min-width:0}
 .toc-list li:last-child{margin-bottom:0}
-.toc-list .toc-d3{padding-left:18px; font-size:13.5px}
-.toc-list a{text-decoration:none; color:var(--muted); transition:color .15s}
+.toc-list .toc-d3{padding-left:16px; font-size:12.5px}
+.toc-list a{display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-decoration:none; color:var(--muted); transition:color .15s}
 .toc-list a:hover{color:var(--sage-ink)}
 .toc-list a.active{color:var(--sage-ink); font-weight:600}
 .back{display:inline-block; margin-top:40px; font-family:system-ui,sans-serif; font-size:13px; color:var(--sage-ink); text-decoration:none}
@@ -163,4 +194,7 @@ footer.site{margin-top:80px; border-top:1px solid var(--rule); padding-top:20px;
   .about .photo{min-height:280px}
   .topbar .inner{padding:12px 18px}
   .page{padding:28px 18px 80px}
+  .post-nav{grid-template-columns:1fr}
+  .post-nav-link.next{text-align:left; align-items:flex-start}
+  details.toc{top:70px; left:10px; width:168px; max-height:calc(100vh - 86px); padding:12px 14px}
 }
