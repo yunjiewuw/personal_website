@@ -3,6 +3,15 @@
 日期：2026-09-03
 範圍：`src/pages/writing/[slug].astro`、相關樣式（`src/styles/global.css`）、`src/content.config.ts`（writing schema）、`src/lib/format.ts`（新增輔助函式）
 
+## 修訂：2026-09-04
+
+實作完成後，根據使用者看過第一版成品的回饋，推翻了原本第 2 節、第 5 節的兩個決定：
+
+1. **目錄位置**：不再是「獨立成一區、置於標題之前」的頁面內區塊，改成**在所有螢幕寬度下都固定在頁面左上角**的 `position:fixed` 側邊欄（參考使用者提供的方格子文章頁截圖）。可收合互動、平滑捲動、scroll-spy 邏輯不變，只是容器從版面內的區塊變成浮動側邊欄；項目文字改成單行截斷（ellipsis）。
+2. **註解呈現方式**：不再保留行內小字（`<sup class="note-ref">` + `<p class="note">`），改成**文末集中的註解清單**。實作上改用標準 GFM footnote 語法（`[^N]` / `[^N]: ...`），這個 repo 用的 Astro markdown 預設就有 `remark-gfm`（含 footnote 擴充）可以直接用，不用額外裝套件或改設定；渲染出來的清單自動有「回到原文」的反向連結。副作用：markdown 自動產生一個 `id="footnote-label"` 的隱藏 `<h2>Footnotes</h2>`，需要在算目錄項目時明確排掉，否則會在目錄裡多出一個「Footnotes」的假項目。
+
+第 2 節、第 5 節以下內文維持原樣（記錄原始決策脈絡），實際版面請以上述修訂為準。
+
 ## 背景 / 目標
 
 `writing` 頁面目前的文章頁（單篇 `[slug].astro`）已經有部分基礎（頂部品牌列、TOC 含 scroll-spy、blockquote、行內小字註解、`hr` 分隔線），但版面順序與方格子/Medium 類長文閱讀骨架不同，且缺少文末的社群/導覽區塊。本次改版目標：

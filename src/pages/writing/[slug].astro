@@ -40,7 +40,7 @@ const showUpdated = Boolean(post.data.updated && post.data.updated.valueOf() !==
       <ol class="toc-list">
         {toc.map((h) => (
           <li class:list={[`toc-d${h.depth}`]}>
-            <a href={`#${h.slug}`} data-target={h.slug}>{h.text}</a>
+            <a href={`#${h.slug}`} data-target={h.slug} title={h.text}>{h.text}</a>
           </li>
         ))}
       </ol>
