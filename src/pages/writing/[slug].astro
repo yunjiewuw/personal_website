@@ -2,22 +2,69 @@
 import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { gradient, writingLabel, writingTagClass, fmtDate } from '../../lib/format';
+import { gradient, avatarClass, writingLabel, writingTagClass, fmtDate, readingTime } from '../../lib/format';
+import { giscusConfig } from '../../lib/giscus';
 
 export const getStaticPaths = (async () => {
-  const posts = await getCollection('writing');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const allPosts = await getCollection('writing');
+  const publicPosts = allPosts
+    .filter((p) => (import.meta.env.PROD ? !p.data.draft : true))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  return allPosts.map((post) => {
+    const i = publicPosts.findIndex((p) => p.id === post.id);
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+        prev: i >= 0 ? (publicPosts[i + 1] ?? null) : null, // older post
+        next: i >= 0 ? (publicPosts[i - 1] ?? null) : null, // newer post
+        more: publicPosts.filter((p) => p.id !== post.id).slice(0, 3),
+      },
+    };
+  });
 }) satisfies GetStaticPaths;
 
-const { post } = Astro.props;
+const { post, prev, next, more } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const minutes = readingTime(post.body ?? '');
+const showUpdated = Boolean(post.data.updated && post.data.updated.valueOf() !== post.data.date.valueOf());
 ---
 <BaseLayout title={`${post.data.title} — Yun-Jie Wu`} description={post.data.summary} active="writing">
   <article class="article">
+    {toc.length > 0 && (
+      <details class="toc" open>
+        <summary class="toc-head">目錄</summary>
+        <ol class="toc-list">
+          {toc.map((h) => (
+            <li class:list={[`toc-d${h.depth}`]}>
+              <a href={`#${h.slug}`} data-target={h.slug}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </details>
+    )}
+
+    <div class="article-head">
+      <h1>{post.data.title}</h1>
+      <a class="byline" href="/#about">
+        <img class="byline-avatar" src="/profile.png" alt="" />
+        <span class="byline-name">Yun-Jie Wu</span>
+      </a>
+      <div class="meta">
+        <time datetime={post.data.date.toISOString()}>{fmtDate(post.data.date)}</time>
+        {showUpdated && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>更新於 {fmtDate(post.data.updated as Date)}</span>
+          </>
+        )}
+        <span aria-hidden="true">·</span>
+        <span>約 {minutes} 分鐘閱讀</span>
+      </div>
+    </div>
+
     {post.data.image ? (
       <div class="hero-thumb hero-photo">
         <img src={post.data.image} alt={post.data.title} />
@@ -29,37 +76,86 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       </div>
     )}
     {post.data.imageCredit && <p class="credit" set:html={post.data.imageCredit} />}
-    <div class:list={['meta', 'meta-bar', writingTagClass(post.data.type)]}>
-      <time datetime={post.data.date.toISOString()}>{fmtDate(post.data.date)}</time>
-      <span>·</span>
-      <span>{writingLabel(post.data.type)}</span>
-    </div>
-    <h1>{post.data.title}</h1>
-    {post.data.tags && post.data.tags.length > 0 && (
-      <div class="tags">
-        {post.data.tags.map((tag) => <span>{tag}</span>)}
-      </div>
-    )}
-    {toc.length > 0 && (
-      <nav class="toc" aria-label="Table of contents">
-        <p class="toc-head">Contents</p>
-        <ol class="toc-list">
-          {toc.map((h) => (
-            <li class:list={[`toc-d${h.depth}`]}>
-              <a href={`#${h.slug}`} data-target={h.slug}>{h.text}</a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-    )}
+
     <div class="prose">
       <Content />
     </div>
-    <a class="back" href="/writing/">← All writing</a>
+
+    <footer class="article-foot">
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="tags">
+          {post.data.tags.map((tag) => <span>{tag}</span>)}
+        </div>
+      )}
+
+      <section class="comments" id="comments">
+        <script
+          is:inline
+          src="https://giscus.app/client.js"
+          data-repo={giscusConfig.repo}
+          data-repo-id={giscusConfig.repoId}
+          data-category={giscusConfig.category}
+          data-category-id={giscusConfig.categoryId}
+          data-mapping={giscusConfig.mapping}
+          data-theme={giscusConfig.theme}
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-lang="zh-TW"
+          crossorigin="anonymous"
+          async
+        ></script>
+      </section>
+
+      {(prev || next) && (
+        <nav class="post-nav">
+          {prev ? (
+            <a class="post-nav-link prev" href={`/writing/${prev.id}/`}>
+              <span class="post-nav-label">← 上一篇</span>
+              <span class="post-nav-title">{prev.data.title}</span>
+            </a>
+          ) : <span />}
+          {next ? (
+            <a class="post-nav-link next" href={`/writing/${next.id}/`}>
+              <span class="post-nav-label">下一篇 →</span>
+              <span class="post-nav-title">{next.data.title}</span>
+            </a>
+          ) : <span />}
+        </nav>
+      )}
+
+      {more.length > 0 && (
+        <section class="more-posts">
+          <h2 class="more-posts-head">更多文章</h2>
+          <div class="gallery">
+            {more.map((p) => (
+              <a class="card" href={`/writing/${p.id}/`}>
+                <div class:list={['thumb', gradient(p.data.color)]}>
+                  {p.data.image && <img src={p.data.image} alt="" loading="lazy" />}
+                  <span class:list={['tagtr', writingTagClass(p.data.type)]}>{writingLabel(p.data.type)}</span>
+                </div>
+                <div class="body">
+                  <h3>{p.data.title}</h3>
+                  <p class="one">{p.data.summary}</p>
+                </div>
+                <div class="foot">
+                  <span class="readmore">{fmtDate(p.data.date)}</span>
+                  <span class:list={['avatar', avatarClass(p.data.color)]}>YW</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <a class="back" href="/writing/">← All writing</a>
+    </footer>
   </article>
 </BaseLayout>
 
 <script>
+  // Scroll-spy: highlight the current section's TOC link.
   const links = document.querySelectorAll<HTMLAnchorElement>('.toc-list a[data-target]');
   if (links.length > 0) {
     const map = new Map<string, HTMLAnchorElement>();
@@ -83,5 +179,11 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
     );
 
     document.querySelectorAll('.prose h2[id], .prose h3[id]').forEach((h) => observer.observe(h));
+  }
+
+  // Default TOC state: collapsed on narrow viewports, expanded on desktop.
+  const toc = document.querySelector<HTMLDetailsElement>('details.toc');
+  if (toc && window.matchMedia('(max-width: 720px)').matches) {
+    toc.open = false;
   }
 </script>
