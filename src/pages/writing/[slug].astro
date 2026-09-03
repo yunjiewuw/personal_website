@@ -13,7 +13,8 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
 <BaseLayout title={`${post.data.title} — Yun-Jie Wu`} description={post.data.summary} active="writing">
   <article class="article">
@@ -28,7 +29,7 @@ const { Content } = await render(post);
       </div>
     )}
     {post.data.imageCredit && <p class="credit" set:html={post.data.imageCredit} />}
-    <div class="meta">
+    <div class:list={['meta', 'meta-bar', writingTagClass(post.data.type)]}>
       <time datetime={post.data.date.toISOString()}>{fmtDate(post.data.date)}</time>
       <span>·</span>
       <span>{writingLabel(post.data.type)}</span>
@@ -39,9 +40,48 @@ const { Content } = await render(post);
         {post.data.tags.map((tag) => <span>{tag}</span>)}
       </div>
     )}
+    {toc.length > 0 && (
+      <nav class="toc" aria-label="Table of contents">
+        <p class="toc-head">Contents</p>
+        <ol class="toc-list">
+          {toc.map((h) => (
+            <li class:list={[`toc-d${h.depth}`]}>
+              <a href={`#${h.slug}`} data-target={h.slug}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
     <div class="prose">
       <Content />
     </div>
     <a class="back" href="/writing/">← All writing</a>
   </article>
 </BaseLayout>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('.toc-list a[data-target]');
+  if (links.length > 0) {
+    const map = new Map<string, HTMLAnchorElement>();
+    links.forEach((a) => {
+      const target = a.dataset.target;
+      if (target) map.set(target, a);
+    });
+
+    const setActive = (id: string) => {
+      links.forEach((a) => a.classList.remove('active'));
+      map.get(id)?.classList.add('active');
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: '-15% 0px -70% 0px', threshold: 0 },
+    );
+
+    document.querySelectorAll('.prose h2[id], .prose h3[id]').forEach((h) => observer.observe(h));
+  }
+</script>
