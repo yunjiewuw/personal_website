@@ -37,6 +37,7 @@ const types = ['reflective', 'science-observation', 'industry-observation', 'opi
       {posts.map((p) => (
         <a class="card" href={`/writing/${p.id}/`} data-type={p.data.type}>
           <div class:list={['thumb', gradient(p.data.color)]}>
+            {p.data.image && <img src={p.data.image} alt="" loading="lazy" />}
             <span class:list={['tagtr', writingTagClass(p.data.type)]}>{writingLabel(p.data.type)}</span>
           </div>
           <div class="body">

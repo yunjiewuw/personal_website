@@ -103,7 +103,24 @@ img{max-width:100%; display:block}
 .prose{font-size:18px; line-height:1.75}
 .prose p{margin:0 0 18px}
 .prose h2{font-size:24px; font-weight:400; margin:36px 0 12px}
+.prose h3{font-size:19.5px; font-weight:700; margin:28px 0 10px}
 .prose a{color:var(--sage-ink)}
+.prose strong{font-weight:700}
+.prose blockquote{margin:20px 0; padding:4px 20px; border-left:3px solid var(--highlight);
+  color:#4a4436; font-style:italic; background:var(--highlight-soft); border-radius:0 10px 10px 0}
+.prose blockquote p{margin:0 0 10px}
+.prose blockquote p:last-child{margin-bottom:0}
+.prose ul,.prose ol{margin:0 0 18px; padding-left:24px}
+.prose li{margin:0 0 10px}
+.prose li:last-child{margin-bottom:0}
+.prose hr{border:none; border-top:1px solid var(--rule); margin:40px 0}
+.prose img{width:100%; border-radius:12px; margin:8px 0 2px; box-shadow:0 12px 28px -20px rgba(70,60,45,.5)}
+.prose table{width:100%; border-collapse:collapse; table-layout:fixed;
+  margin:8px 0 22px; font-family:system-ui,sans-serif; font-size:14.5px}
+.prose th,.prose td{border:1px solid var(--rule); padding:9px 12px; text-align:left; vertical-align:top; word-break:break-word}
+.prose th{background:var(--highlight-soft); color:var(--sage-ink); font-weight:600}
+.prose .note{display:inline; font-family:system-ui,sans-serif; font-size:14px; color:var(--muted)}
+.prose del{color:var(--muted)}
 .back{display:inline-block; margin-top:40px; font-family:system-ui,sans-serif; font-size:13px; color:var(--sage-ink); text-decoration:none}
 .back:hover{color:var(--clay-ink)}
 

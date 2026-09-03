@@ -26,6 +26,8 @@ const writing = defineCollection({
     type: z.enum(['reflective', 'science-observation', 'industry-observation', 'opinion']),
     summary: z.string(),           // one-liner shown on the card
     color: morandi.default('fog'),
+    image: z.string().optional(),        // preview/hero photo, e.g. '/post-x.jpg'
+    imageCredit: z.string().optional(),  // raw HTML credit shown under the hero photo
     tags: z.array(z.string()).optional(),  // freeform topic/project labels, shown on the article page
     draft: z.boolean().default(false),
   }),
