@@ -36,7 +36,7 @@ const showUpdated = Boolean(post.data.updated && post.data.updated.valueOf() !==
 <BaseLayout title={`${post.data.title} — Yun-Jie Wu`} description={post.data.summary} active="writing">
   {toc.length > 0 && (
     <details class="toc" open>
-      <summary class="toc-head">目錄</summary>
+      <summary class="toc-head">Table of Content</summary>
       <ol class="toc-list">
         {toc.map((h) => (
           <li class:list={[`toc-d${h.depth}`]}>
