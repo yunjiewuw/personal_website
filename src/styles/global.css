@@ -196,7 +196,7 @@ details.toc{position:fixed; top:84px; left:24px; z-index:5; width:208px; max-hei
   border:1px solid var(--rule); background:var(--card); border-radius:12px; padding:14px 18px;
   box-shadow:0 12px 28px -18px rgba(var(--shadow-rgb),.3)}
 .toc-head{font-family:system-ui,sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted);
-  margin:0; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px}
+  margin:0; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px; white-space:nowrap}
 .toc-head::-webkit-details-marker{display:none}
 .toc-head::marker{content:""}
 .toc-head::after{content:"▾"; font-size:11px; color:var(--muted); transition:transform .15s; flex-shrink:0}

@@ -59,14 +59,18 @@ on the effect rather than argue about it.
 
 ## How I do it
 
-**The paradigm.** Each image passes through three recognition stages:
+### The paradigm
+
+Each image passes through three recognition stages:
 *pre-disambiguation* (Mooney image, never seen before), *grayscale* (the clear
 photograph that supplies the prior), and *post-disambiguation* (the identical
 Mooney image, now interpretable). Comparing the first and third stages holds the
 physical stimulus constant and varies only what the observer knows — which is
 exactly the manipulation the question needs.
 
-**Making the stimulus invisible.** Every image is presented twice, once under
+### Making the stimulus invisible
+
+Every image is presented twice, once under
 normal binocular viewing and once under **discontinuous flash suppression
 (dCFS)**: a high-contrast, 10 Hz coloured Mondrian animation goes to the dominant
 eye while the target goes to the other, and the target drops out of subjective
@@ -76,20 +80,26 @@ Target opacity is set per participant with a two-stage staircase, so each person
 receives as much visual information as suppression allows — the conscious and
 unconscious conditions then differ only in what reaches the dominant eye.
 
-**Stimulus selection.** From a 120-image library, a pilot study identified images
+### Stimulus selection
+
+From a 120-image library, a pilot study identified images
 that were reliably *un*recognizable before disambiguation and reliably
 recognizable after. Ranking those by the size of the confidence jump left a final
 set with a mean increase of roughly 50 points on a 100-point scale — images that
 genuinely flip.
 
-**Imaging.** 17 participants, 3T fMRI, seven runs structured so that a rolling
+### Imaging
+
+17 participants, 3T fMRI, seven runs structured so that a rolling
 subset of images is disambiguated in each run while others are held back, giving
 all three stages within a single session. Preprocessing runs through fMRIPrep;
 single-subject GLMs model each condition with motion parameters, drift terms and
 spike regressors, with head motion and temporal SNR checked before anything else
 is done.
 
-**Analysis: representational similarity.** Univariate activation is the wrong
+### Representational similarity analysis
+
+Univariate activation is the wrong
 tool here — the question is not *how much* a region responds but *what it
 represents*. So for each region of interest I build a representational
 dissimilarity matrix over all images and stages using correlation distance, then

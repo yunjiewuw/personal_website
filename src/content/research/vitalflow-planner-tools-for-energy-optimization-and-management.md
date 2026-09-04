@@ -39,6 +39,8 @@ This is not about maximizing busyness. It is about placing the right cognitive d
 
 The first and hardest step is instrumentation. Before any model can predict energy, it needs a reliable signal.
 
+### The signals
+
 I am currently building the data collection and pipeline layer, anchored to the Apple Watch via HealthKit. The Apple Watch Ultra 3 — the initial target device — carries a dense array of sensors that, when interrogated correctly, can paint a reasonably accurate picture of physiological state. The highest-value signals for energy modeling are:
 
 - **HRV-SDNN** (heart rate variability): the single most important proxy for autonomic recovery. Measured continuously during sleep and during breathing exercises.
@@ -48,9 +50,13 @@ I am currently building the data collection and pipeline layer, anchored to the 
 - **Skin temperature**: a sensitive early signal for illness, stress load, and hormonal fluctuation.
 - **Cumulative activity load**: the three-day exercise accumulation that shapes how much recovery the body still owes.
 
+### The pipeline
+
 The data pipeline works like this: after HealthKit authorization, the iOS app listens for new data via `HKObserverQuery`. Feature computation happens on-device — the raw physiological readings never leave the device; only the derived features are transmitted to the backend. Those features land in a time-series store (InfluxDB) alongside user metadata (PostgreSQL). Each night at midnight, a batch job recomputes the personal energy baseline and updates the prediction model.
 
 This architecture matters for a reason beyond technical convenience: it makes a genuine privacy commitment. The raw signals — your sleep, your heart — stay on your hardware.
+
+### The model
 
 The model right now is in an early phase: rule-based thresholds derived from clinical research (HRV below 50ms triggers a low-recovery flag, for instance), layered with personal z-score deviation from your own rolling 7-day baseline. This is not yet predictive in a meaningful sense — it is descriptive. But it is the necessary first step: establish a personal physiological baseline before attempting to forecast from it.
 
@@ -75,13 +81,17 @@ The application layer — the part that surfaces these recommendations — is be
 
 The Apple Watch is an excellent starting point: widely deployed, sensor-rich, HealthKit API is mature. But its physiological capture has real limits. Daytime HRV measurement is sparse compared to dedicated devices like Oura Ring or Whoop. And — importantly — none of the signals currently captured reflect neural state directly.
 
-The direction I am most interested in longer-term is **in-ear EEG**.
+### In-ear EEG
+
+The direction I am most interested in longer-term is in-ear EEG.
 
 In-ear electroencephalography — small passive electrodes positioned inside the ear canal — can capture continuous electrical brain activity in a form factor that is genuinely wearable throughout the day. Unlike traditional EEG setups, in-ear configurations do not require gel, scalp preparation, or laboratory conditions. Early-generation devices are already commercially available, and the signal quality for broad frequency-band analysis (alpha, theta, beta power ratios) is sufficient to distinguish rest, focus, and cognitive load states.
 
 This would represent a qualitative leap in the richness of available signal. Peripheral physiological indicators like HRV and skin temperature tell you something about *recovery and arousal*, but they do not tell you much about the current quality of neural engagement. EEG-derived markers could add a real-time cognition dimension to the energy model: not just "your body is recovered" but "your brain is currently in a state consistent with high associative processing" — which is a more direct proxy for insight-grade thinking than anything the Apple Watch can provide.
 
 Adding in-ear EEG as a second sensor modality would allow the model to triangulate across both peripheral and neural signals — physiological readiness on one axis, actual cognitive state on another. The combination is closer to what you would want if you were trying to truly track the conditions under which a person is most capable of their best thinking.
+
+### Other modalities
 
 Other modalities worth exploring as the sensor landscape matures: continuous glucose monitoring (already commercially available, and metabolic state is deeply linked to cognitive function), environmental sensing (ambient noise, light spectrum), and behavioral signals derived from typing cadence and activity patterns.
 

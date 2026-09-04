@@ -2,7 +2,7 @@
 title: Next Idea Prediction：預測一個 idea 代表什麼？需要什麼？
 date: 2026-09-03
 type: opinion
-summary: 從人機協同演化的老理想出發，提出一個「預測下一個念頭」的認知世界模型提案，並誠實面對它比 LLM 的 next word prediction 難在哪裡。
+summary: 透過腦波或是日記資料做為訓練 Next Idea Prediction 的模型，各自需要什麼理論與實作技巧？現況和瓶頸是什麼？
 color: fog
 image: /next-idea-prediction-cover.jpg
 imageCredit: 'Photo by <a href="https://unsplash.com/@m_malkovich?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">petr sidorov</a> on <a href="https://unsplash.com/photos/king-of-diamonds-playing-card-GESOWH4YLRI?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>'
