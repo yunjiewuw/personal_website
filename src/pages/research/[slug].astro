@@ -21,7 +21,7 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3 && h.slug !== 'f
 <BaseLayout title={`${r.data.title} — Yun-Jie Wu`} description={r.data.summary} active="projects">
   {toc.length > 0 && (
     <details class="toc" open>
-      <summary class="toc-head">Table of Content</summary>
+      <summary class="toc-head">Contents</summary>
       <ol class="toc-list">
         {toc.map((h) => (
           <li class:list={[`toc-d${h.depth}`]}>
