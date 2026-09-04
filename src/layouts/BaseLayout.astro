@@ -22,6 +22,14 @@ const siteName = 'Yun-Jie Wu';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Apply saved color theme before first paint, to avoid a flash of the wrong palette.
+      try {
+        if (localStorage.getItem('site-theme') === 'warm') {
+          document.documentElement.setAttribute('data-theme', 'warm');
+        }
+      } catch (e) {}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -52,8 +60,33 @@ const siteName = 'Yun-Jie Wu';
       <slot />
       <footer class="site">
         <span>{siteName}</span>
-        <span>Email · Scholar · GitHub · X</span>
+        <div class="footer-right">
+          <span>Email · Scholar · GitHub · X</span>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch color theme" title="Switch color theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" />
+            </svg>
+            <svg class="icon-snow" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+              <path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11M12 2l-2.3 2M12 2l2.3 2M12 22l-2.3-2M12 22l2.3-2M4.5 6.5l3 .4M4.5 6.5l.9-2.7M19.5 6.5l-3 .4M19.5 6.5l-.9-2.7M4.5 17.5l3-.4M4.5 17.5l.9 2.7M19.5 17.5l-3-.4M19.5 17.5l-.9 2.7" />
+            </svg>
+          </button>
+        </div>
       </footer>
     </main>
+    <script>
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle?.addEventListener('click', () => {
+        const goingWarm = document.documentElement.getAttribute('data-theme') !== 'warm';
+        if (goingWarm) {
+          document.documentElement.setAttribute('data-theme', 'warm');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+        try {
+          localStorage.setItem('site-theme', goingWarm ? 'warm' : 'cool');
+        } catch (e) {}
+      });
+    </script>
   </body>
 </html>

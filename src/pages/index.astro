@@ -94,6 +94,7 @@ const posts = (await getCollection('writing'))
             tagClass={writingTagClass(p.data.type)}
             gradient={gradient(p.data.color)}
             avatar={avatarClass(p.data.color)}
+            image={p.data.image}
           />
         ))}
       </div>
